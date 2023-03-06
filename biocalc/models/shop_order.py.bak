@@ -1,0 +1,53 @@
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+from .aqua_user_profile import Address
+
+
+class Order(models.Model):
+
+    STATUS_CHOICES = (("P", "PENDING"), ("C","COMPLETED"))
+
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE)
+    
+    products = models.ManyToManyField(
+        'biocalc.AquaBaseItem', 
+        through='biocalc.OrderItem')
+    
+    amount = models.PositiveIntegerField()
+
+    delivery = models.CharField(
+        max_length=250, 
+        default="Self pickup")
+    
+    date_created = models.DateTimeField(
+        auto_now_add=True)
+    
+    date_of_payment = models.DateTimeField(
+        blank=True, null=True)
+    
+    receipt = models.CharField(
+        max_length=150, 
+        blank=True, null=True)
+    
+    description = models.CharField(
+        max_length=1000,
+        blank=True, null=True)
+    
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOICES, default="P")
+    shipping_address = models.ForeignKey(
+        Address, related_name='shipping_orders', on_delete=models.SET_NULL, blank=True, null=True)
+    billing_address = models.ForeignKey(
+        Address, related_name='billing_orders', on_delete=models.SET_NULL, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    
+    def __str__(self) -> str:
+        return f"order #{self.id} from {self.user}"

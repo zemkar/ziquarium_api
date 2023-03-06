@@ -1,0 +1,49 @@
+
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets, generics, pagination, status
+from rest_framework.response import Response
+from biocalc.models import Order
+from biocalc.serializers import OrderWriteSerializer, OrderReadSerializer
+
+from rest_framework.permissions import (
+    IsAuthenticated, 
+    AllowAny, 
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+    )
+
+class OrderViewSet(viewsets.ModelViewSet):  #TODO
+    """
+    Orders
+
+    In response return set orders/order only for current user, or all for admin
+    """
+    queryset = Order.objects.all()
+    permission_classes = (IsAuthenticated,) #(AllowAny,)
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'update', 'partial_update', 'destroy'):
+            return OrderWriteSerializer
+
+        return OrderReadSerializer
+    
+    def list(self, request):
+        queryset = Order.objects.all()
+
+        if self.request.user.is_authenticated:
+            if self.request.user.is_superuser: pass
+            else: queryset = queryset.filter(user=self.request.user)
+        else:
+            return Response(status= status.HTTP_401_UNAUTHORIZED)
+
+        serializer = OrderReadSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        queryset = Order.objects.all()
+        order = get_object_or_404(queryset, pk=pk)
+        if self.request.user.is_authenticated and (order.user==self.request.user or self.request.user.is_superuser):
+            serializer = OrderReadSerializer(order)
+            return Response(serializer.data)
+        return Response({"error": "sorry, is no publicly available data for this object"}, status=status.HTTP_401_UNAUTHORIZED)
+    
