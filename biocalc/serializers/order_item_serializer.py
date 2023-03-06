@@ -21,30 +21,34 @@ class OrderItemSerializer(serializers.ModelSerializer):
     def validate(self, validated_data):
         print(validated_data)
         order_quantity = validated_data['quantity']
-        # product_quantity = validated_data['product'].quantity
+        product = validated_data['product']
+        try: 
+            saleData = ItemSellingData.objects.get(shop_item = product)
+            product_quantity = saleData.quantity
+        except: product_quantity = 0
 
         order_id = self.context['view'].kwargs.get('order_id')
-        product = validated_data['product']
         current_item = OrderItem.objects.filter(
             order__id=order_id, product=product)
 
-        # if(order_quantity > product_quantity):
-        #     error = {'quantity': _('Ordered quantity is more than the stock.')}
-        #     raise serializers.ValidationError(error)
+        if(order_quantity > product_quantity):
+            error = {'quantity': _('Ordered quantity is more than the stock.')}
+            raise serializers.ValidationError(error)
 
         if not self.instance and current_item.count() > 0:
             error = {'product': _('Product already exists in your order.')}
             raise serializers.ValidationError(error)
 
-        # if self.context['request'].user == product.seller:
-        #     error = _('Adding your own product to your order is not allowed')
-        #     raise PermissionDenied(error)
 
         return validated_data
 
     def get_price(self, obj):
-        sellingData = ItemSellingData.objects.get(shop_item = obj.pk)
-        return sellingData.price
+        try:
+            sellingData = ItemSellingData.objects.get(shop_item = obj.pk)
+            return sellingData.price
+        except:
+            return None
 
     def get_cost(self, obj):
-        return obj.cost
+        try: return obj.cost
+        except: return None

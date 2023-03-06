@@ -28,6 +28,7 @@ class OrderItem(models.Model):
         """
         Total cost of the ordered item
         """
-        
-        sellingData = ItemSellingData.objects.get(shop_item = self.pk)
-        return round(self.quantity * sellingData.price, 2)
+        try:
+            sellingData = ItemSellingData.objects.get(shop_item = self.pk)
+            return round(self.quantity * sellingData.price, 2)
+        except: return 0
