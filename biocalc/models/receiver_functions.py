@@ -2,6 +2,9 @@
 import os
 import shutil
 from django.conf import settings
+
+from .shop_payment import Payment
+from .shop_order import Order
 from .aqua_item_gallery import ItemGalleryImage
 from .plant import Plant
 from .fish import Fish
@@ -32,6 +35,10 @@ def create_plant_additional_table(sender, instance, created, **kwargs):
 def image_pre_delete(sender, instance, **kwargs):
     instance.image.delete(False)
 
+@receiver(post_save, sender=Order)
+def paymentCreation(sender, instance, created, **kwargs):
+    if created:
+        Payment.objects.create(order=instance, payment_option="S")
 
 @receiver(pre_save, sender=ItemGalleryImage)
 def image_pre_save(sender, instance, **kwargs):

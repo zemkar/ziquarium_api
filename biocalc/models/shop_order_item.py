@@ -12,6 +12,7 @@ class OrderItem(models.Model):
         Order, related_name="order_items", on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product, related_name="product_orders", on_delete=models.CASCADE)
+    product_name = models.CharField("product_name", max_length=200)
     quantity = models.IntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -21,7 +22,7 @@ class OrderItem(models.Model):
         ordering = ('-created_at', )
 
     def __str__(self):
-        return self.order.buyer.get_full_name()
+        return f"{self.order.buyer.get_full_name()}  {self.product} {self.quantity}"
 
     @cached_property
     def cost(self):
@@ -29,6 +30,6 @@ class OrderItem(models.Model):
         Total cost of the ordered item
         """
         try:
-            sellingData = ItemSellingData.objects.get(shop_item = self.pk)
+            sellingData = ItemSellingData.objects.get(shop_item = self.product)
             return round(self.quantity * sellingData.price, 2)
         except: return 0

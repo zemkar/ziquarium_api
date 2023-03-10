@@ -10,6 +10,7 @@ class IsPaymentForOrderNotCompleted(BasePermission):
         'Creating a checkout session for completed payment is not allowed.')
 
     def has_permission(self, request, view):
+        print(request.user) # DEBUG
         if request.user.is_authenticated:
             order_id = view.kwargs.get('order_id')
             order = get_object_or_404(Order, id=order_id)

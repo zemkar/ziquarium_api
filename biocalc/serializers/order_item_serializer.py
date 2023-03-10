@@ -14,7 +14,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'order', 'product', 'quantity',
+        fields = ('id', 'order', 'product', 'quantity', 'product_name',
                   'price', 'cost', 'created_at', 'updated_at', )
         read_only_fields = ('order', )
 
@@ -44,11 +44,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         try:
-            sellingData = ItemSellingData.objects.get(shop_item = obj.pk)
-            return sellingData.price
+            sellingData = ItemSellingData.objects.get(shop_item = obj.product)
+            return sellingData.get_price()
         except:
-            return None
+            return 0
 
     def get_cost(self, obj):
-        try: return obj.cost
-        except: return None
+        try:
+            return obj.cost
+        except: 
+            return None

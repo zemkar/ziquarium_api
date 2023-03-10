@@ -1,4 +1,5 @@
 
+import datetime
 from django.db import models
 from django.db.models.signals import post_save
 
@@ -28,3 +29,16 @@ class ItemSellingData(models.Model):
 
     def __str__(self) -> str:
         return f"{self.shop_item} "
+    
+    def get_price(self):
+        return self.price
+    
+    def get_quantity_discount(self):
+        if self.quantity_for_discount > 0 and self.quantity_discount > 0:
+            return {"quantity":self.quantity_for_discount, "discount":self.quantity_discount}
+        return
+
+    def get_sale_discount(self):
+        if self.sale_status and self.sale_discount > 0 and self.sale_end_date >= datetime.date.today():
+            return self.sale_discount
+        return

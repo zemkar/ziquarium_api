@@ -6,11 +6,19 @@ from rest_framework.response import Response
 import stripe
 
 from biocalc.models import Payment, Order
+from rest_framework.permissions import (
+    IsAuthenticated, 
+    AllowAny, 
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+    )
+
 
 class StripeWebhookAPIView(APIView):
     """
     Stripe webhook API view to handle checkout session completed and other events.
     """
+    permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
         payload = request.body
