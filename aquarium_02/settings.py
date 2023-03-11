@@ -42,7 +42,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True #False #
-CSRF_TRUSTED_ORIGINS = ['ziquarium-api.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['http://ziquarium-api.onrender.com', 'https://ziquarium-api.onrender.com']
 ALLOWED_HOSTS = ['*'] # 
 
 # properties for deployment on http://render.com 
