@@ -1,1 +1,0 @@
-docker build --tag django_ziquarium:alfa_1 .
