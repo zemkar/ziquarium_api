@@ -3,7 +3,7 @@ FROM python:3.10-alpine3.16
 
 EXPOSE 8000
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/backend
 
 ENV PYTHONDONTWRITEBYTECODE = 1
 ENV PYTHONUNBUFFERED = 1
@@ -23,7 +23,7 @@ ENV DB_PORT=5432
 ENV SERVER_URL=http://127.0.0.1:8000
 ENV SITE_URL=http://127.0.0.1:3000
 
-COPY requirements.txt /usr/src/app
+COPY requirements.txt /usr/src/app/backend
 
 RUN \
  apk add --no-cache postgresql-libs && \
@@ -31,7 +31,7 @@ RUN \
  python3 -m pip install -r requirements.txt --no-cache-dir && \
  apk --purge del .build-deps
 
-COPY . /usr/src/app
+COPY . /usr/src/app/backend
 
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
 
