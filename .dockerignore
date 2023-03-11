@@ -6,7 +6,6 @@ biocalc/models/__pycache__
 users/__pycache__
 users/migrations/__pycache__
 users/models/__pycache__
-# .env
-# media/
+.env
 env/
 biocalc/views/__pycache__
