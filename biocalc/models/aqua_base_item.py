@@ -121,10 +121,12 @@ class AquaBaseItem(models.Model):
         if self.image:
             # save without image and add it after saving in update field
             image = self.image
+            print(f"save without image: {image}")
             self.image = None
             super(AquaBaseItem, self).save(*args, **kwargs)
             if self.pk:
                 self.image = image
+                print(f"add image: {image}")
                 super(AquaBaseItem, self).save(update_fields=['image'])
         super(AquaBaseItem, self).save()
 
