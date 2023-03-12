@@ -13,13 +13,10 @@ def index(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def protected(request):
-    path = settings.MEDIA_ROOT
-    for item in os.listdir(path):
-        d = os.path.join(path, item)
-        if os.path.isdir(d):
-            print(f"DIR: {d}")
-        if os.path.isfile(d):
-            print(f"FILE: {d}")
+    media_path = settings.MEDIA_ROOT
+    for path, subdirs, files in os.walk(media_path):
+        for name in files:
+            print(os.path.join(path, name))
 
     return Response({"status": "OK, goodbye", "msg":"you are user"})
 
