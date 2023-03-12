@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 from django.shortcuts import  render
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -11,6 +13,8 @@ def index(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def protected(request):
+    path = settings.MEDIA_ROOT
+    print("IMAGES:\n", os.listdir(path))
     return Response({"status": "OK, goodbye", "msg":"you are user"})
 
 @api_view(['GET'])
