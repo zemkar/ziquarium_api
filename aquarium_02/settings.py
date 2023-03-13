@@ -26,7 +26,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    IN_DEV=(bool, False)
 )
 
 # Base url to serve media files
@@ -42,7 +43,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #False #
+DEBUG = env("DEBUG", bool, True) #True #False #
+IN_DEV = env("IN_DEV", bool, True) 
 CSRF_TRUSTED_ORIGINS = ['http://ziquarium-api.onrender.com', 'https://ziquarium-api.onrender.com']
 ALLOWED_HOSTS = ['*'] # 
 
@@ -123,7 +125,7 @@ WSGI_APPLICATION = 'aquarium_02.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-if env('DEV'):
+if IN_DEV:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
