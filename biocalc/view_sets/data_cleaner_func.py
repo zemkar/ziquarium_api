@@ -1,4 +1,5 @@
 
+import os
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -26,7 +27,18 @@ def data_cleaner(request_data, item_category, action_creator_id=None, instance=N
 
     if instance: # if update
         cleared_data['latest_editor'] = str(action_creator_id)
-        if "user_placeholder" in cleared_data: cleared_data.pop("user_placeholder")
+        if "user_placeholder" in cleared_data: 
+            cleared_data.pop("user_placeholder")
+        if "image" in cleared_data:
+            print("got image")
+            try:
+                print("image:", instance.image, instance.image.path)
+                if os.path.isfile(instance.image.path):
+                    print("del old image")
+                    os.remove(instance.image.path)
+            except:
+                pass
+        else: print("no image")
     else:       # if creation
         cleared_data['user_placeholder'] = str(action_creator_id)
 
@@ -56,6 +68,28 @@ def data_cleaner(request_data, item_category, action_creator_id=None, instance=N
     else: 
         cleared_data['approved'] = False
         cleared_data['approving_user'] = None
+
+        
+# @receiver(pre_save, sender=Fish)
+# def check_fish_image_to_delete(sender, instance, **kwargs):
+    
+#     if not instance.pk:
+#         print("new instance")
+#         return False
+#     else:
+#         try:
+#             old_image = Fish.objects.get(pk=instance.pk).image
+            
+#             print("have old image", old_image)
+#             new_image = instance.image
+#             if not old_image == new_image:
+#                 print("new image != old image ", new_image, old_image)
+#                 if os.path.isfile(old_image.path):
+#                     print("del old image")
+#                     os.remove(old_image.path)
+
+#         except Fish.DoesNotExist:
+#             return False
 
     return cleared_data
             

@@ -45,7 +45,17 @@ if need, in Dockerfile you can change ENV data
 Navigate to http://localhost:8000/admin/
 
 Test users: 
->admin : 951Qsc62Ax3z
->editor : 951Qsc62Ax3z
->user : 951Qsc62Ax3z
+> - `admin : 951Qsc62Ax3z`
+>>  Can create, delete, edit and aprove editions of items
+>
+>> Can buy
+
+> - `editor : 951Qsc62Ax3z`
+>> Can create and edit items
+>
+>> Can buy
+
+> - `user : 951Qsc62Ax3z`
+>> ** Can buy
+
 

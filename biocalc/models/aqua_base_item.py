@@ -8,7 +8,6 @@ from django.conf import settings
 
 
 def path_rename(instance, filename):
-    print("path_rename: -----------\n", instance, "\n--------------")
     ext = filename.split('.')[-1]
     return f'{instance.id}\{instance.name}.{ext}'
 
@@ -64,7 +63,6 @@ class AquaBaseItem(models.Model):
     image = models.ImageField(
         upload_to=path_rename,
         blank=True, null=True,
-        default='SomeItem.png', 
         height_field=None, 
         width_field=None, 
         max_length=None)
@@ -117,17 +115,17 @@ class AquaBaseItem(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        print(self.type_category)
-        if self.image:
-            # save without image and add it after saving in update field
-            image = self.image
-            print(f"save without image: {image}")
-            self.image = None
-            super(AquaBaseItem, self).save(*args, **kwargs)
-            if self.pk:
-                self.image = image
-                print(f"add image: {image}")
-                super(AquaBaseItem, self).save(update_fields=['image'])
+        if not self.pk:
+            if self.image:
+                # save without image and add it after saving in update field
+                image = self.image
+                print(f"save without image: {image}")
+                self.image = None
+                super(AquaBaseItem, self).save(*args, **kwargs)
+                if self.pk:
+                    self.image = image
+                    print(f"add image: {image}")
+                    super(AquaBaseItem, self).save(update_fields=['image'])
         super(AquaBaseItem, self).save()
 
 

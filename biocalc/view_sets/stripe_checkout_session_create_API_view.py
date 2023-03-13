@@ -50,7 +50,7 @@ class StripeCheckoutSessionCreateAPIView(APIView):
                 },
                 'quantity': quantity
             }
-            print("stripe_checkout_session_create_API_view \n",q_discount, sale, itemData.get_price()," data: \n", data)
+            # print("stripe_checkout_session_create_API_view \n",q_discount, sale, itemData.get_price()," data: \n", data, "\n\n", settings.SITE_URL + "/ty/?successful=true&session_id={CHECKOUT_SESSION_ID}\n\n")
             order_items.append(data)
         stripe.api_key = settings.STRIPE_SECRET_KEY
         checkout_session = stripe.checkout.Session.create(
@@ -63,6 +63,6 @@ class StripeCheckoutSessionCreateAPIView(APIView):
             success_url=settings.SITE_URL + "/ty/?successful=true&session_id={CHECKOUT_SESSION_ID}",
             cancel_url=settings.SITE_URL + "/?canceled=true",
         )
-        print("stripe_checkout_session_create_API_view \n checkout_session: \n", checkout_session)
+        # print("stripe_checkout_session_create_API_view \n checkout_session: \n", checkout_session)
 
         return Response({'sessionId': checkout_session['id'], "url":checkout_session['url']}, status=status.HTTP_201_CREATED)

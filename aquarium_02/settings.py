@@ -17,16 +17,17 @@ from pathlib import Path
 from datetime import timedelta
 
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Base url to serve media files
 MEDIA_URL = '/media/'
@@ -122,22 +123,24 @@ WSGI_APPLICATION = 'aquarium_02.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env("DB_NAME"), 
-        'USER': env("DB_USER"), 
-        'PASSWORD': env("DB_PASSWORD"), 
-        'HOST': env("DB_HOST"), 
-        'PORT': env("DB_PORT"), 
+if env('DEV'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env("DB_NAME"), 
+            'USER': env("DB_USER"), 
+            'PASSWORD': env("DB_PASSWORD"), 
+            'HOST': env("DB_HOST"), 
+            'PORT': env("DB_PORT"), 
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
