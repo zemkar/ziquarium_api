@@ -53,6 +53,19 @@ class StripeWebhookAPIView(APIView):
 
             # send_payment_success_email_task.delay(customer_email)
 
+        if event['type'] == 'checkout.session.expired':
+            session = event['data']['object']
+            customer_email = session['customer_details']['email']
+            order_id = session['metadata']['order_id']
+
+            print('Payment session time expired')
+
+            payment = get_object_or_404(Payment, order=order_id)
+            payment.status = 'F'
+            payment.save()
+        
+
+
         # Can handle other events here.
 
         return Response(status=status.HTTP_200_OK)
