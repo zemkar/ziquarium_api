@@ -18,20 +18,19 @@ An Ziquarium API built using Django Rest Framework.
 
 ## Getting Started
 
-Clone this repository to your local machine.
 #### with docker
-In terminal, from folder of cloned project
 - create Docker image: 
->`docker build . -t ziquarium-api`
-if need, in Dockerfile you can change ENV data
+>`docker build https://github.com/zemkar/ziquarium_api.git -t ziquarium-api`
 
 - run Docker image: 
 >`docker run -p 8000:8000 -d ziquarium-api`
 
 #### without docker
+
+- Clone this repository to your local machine.
+>`git clone https://github.com/zemkar/ziquarium_api.git`
 - Create virtual environment: 
 >`py -m venv env`
-"env" name of environment and can be changed
 
 - Activate virtual environment: 
 >`.\env\Scripts\activate`
