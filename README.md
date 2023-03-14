@@ -7,6 +7,8 @@ An Ziquarium API built using Django Rest Framework.
 - Custom permissions set for necessary endpoints.
 - Payment integration using Stripe.
 
+## [Live demo](https://ziquarium.onrender.com/)
+
 ## Technologies Used
 - Django Rest Framework
 - PostgreSQL
