@@ -57,6 +57,6 @@ Test users:
 >> Can buy
 
 > - `user : 951Qsc62Ax3z`
->> ** Can buy
+>>  Can buy
 
 
